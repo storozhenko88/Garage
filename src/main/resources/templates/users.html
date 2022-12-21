@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>users</title>
+</head>
+<body>
+<tbody>
+<tr th:each="user: ${users}">
+
+    <h1>
+        <td th:text="'id client - ' + ${user.id} + ', '"/>
+        <td th:text="'name - ' + ${user.name} + ', '"/>
+        <td th:text="'client car - ' + ${user.userCars} + '!'" />
+    </h1>
+</tr>
+</tbody>
+</body>
+</html>
