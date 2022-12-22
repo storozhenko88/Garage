@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-
     private UserService userService;
 
     @Autowired
@@ -26,17 +25,15 @@ public class UserController {
         model.addAttribute("user", userService.getUser(id));
         return "user";
     }
-
-    @GetMapping("/{id}/cars")
-    public String getUserCars(@PathVariable int id, Model model) {
-        model.addAttribute("cars", userService.getUser(id).getUserCars());
-        return "user_cars";
-    }
-
     @GetMapping
     public String getAllUser(Model model) {
         model.addAttribute("users", userService.getAllUser());
         return "users";
+    }
+    @GetMapping("/{id}/cars")
+    public String getUserCars(@PathVariable int id, Model model) {
+        model.addAttribute("cars", userService.getUser(id).getUserCars());
+        return "user_cars";
     }
 
     @PostMapping
@@ -50,12 +47,16 @@ public class UserController {
         model.addAttribute("user", userService.addCarUser(id, car));
        return "user";
     }
+    @PutMapping("/{id}")
+    public String updateUser (@PathVariable int id,@RequestBody User user, Model model){
+        model.addAttribute("user", userService.updeteUser(id, user));
+        return "user";
+    }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable int id, Model model) {
         model.addAttribute("user", userService.deleteUser(id));
         return "user";
     }
-
 
 }

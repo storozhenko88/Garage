@@ -3,7 +3,6 @@ package com.example.garage.service;
 import com.example.garage.model.Car;
 import com.example.garage.model.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -13,37 +12,14 @@ import java.util.List;
 @Service
 public class UserService {
 
-  private final List<User> users = new ArrayList<>();
+    private final List<User> users;
+    private CarService carService;
     private int counter = 0;
- //   private List<User> users;
 
-    public UserService() {
-//        users = new ArrayList<>();
-//
-//        User user1 = new User();
-//        user1.setId(1);
-//        user1.setName("dima");
-//      //  List<Car> car1 = List.of(new Car(1, "bmw"), new Car(2, "audi"), new Car(3, "jip"));
-//        List<Car> car1 = new ArrayList<>();
-//        car1.add(new Car(1, "bmw"));
-//        car1.add(new Car(2, "audi"));
-//        car1.add(new Car(3, "jip"));
-//        user1.setUserCars(car1);
-//
-//        User user2 = new User();
-//        user2.setId(2);
-//        user2.setName("kiril");
-//   //     List<Car> car2 = List.of(new Car(1, "bmw"), new Car(2, "audi"), new Car(3, "jip"));
-//        List<Car> car2 = new ArrayList<>();
-//        car2.add(new Car(1, "bmw2"));
-//        car2.add(new Car(2, "audi2"));
-//        car2.add(new Car(3, "jip2"));
-//        user2.setUserCars(car2);
-//
-//        users.add(user1);
-//        users.add(user2);
+    public UserService(CarService carService) {
+        this.carService = carService;
+        users = new ArrayList<>();
     }
-
 
     public User addUser(User user) {
         user.setId(++counter);
@@ -54,14 +30,30 @@ public class UserService {
     public User addCarUser(int id, Car carUser) {
         for (User user : users) {
             if (user.getId() == id) {
-                int count = user.getUserCars().size() + 1;
-                carUser.setId(count);
-//                user.addCar(car);
-                user.getUserCars().add(carUser);
+                if (!carService.getAllCars().isEmpty()) {
+                    for (Car car : carService.getAllCars()) {
+                        if (car.getBrand().equals(carUser.getBrand())) {
+                            carUser.setId(car.getId());
+                            user.getUserCars().add(carUser);
+                            return user;
+                        }
+                    }
+                }
+
+                user.getUserCars().add(carService.addCar(carUser));
                 return user;
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "car not added");
+    }
+
+    public User updeteUser(int id, User client) {
+        for (User user : users)
+            if (user.getId() == id) {
+                user.setName(client.getName());
+                return user;
+            }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "data transferred incorrectly");
     }
 
     public User getUser(int id) {

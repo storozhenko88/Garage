@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cars</title>
+</head>
+<body>
+<tbody>
+<tr th:each="car: ${cars}">
+    <h1>
+        <td th:text="'id car - ' + ${car.id} + ', '" />
+        <td th:text="'brand - ' + ${car.brand} + ', '" />
+    </h1>
+</tr>
+</tbody>
+</body>
+</html>

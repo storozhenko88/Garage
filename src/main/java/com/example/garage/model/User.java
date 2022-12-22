@@ -16,7 +16,4 @@ public class User {
         userCars = new ArrayList<>();
     }
 
- //   public void addCar (Car car){
- //       userCars.add(car);
- //   }
 }
